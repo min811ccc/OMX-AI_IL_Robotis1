@@ -2,7 +2,7 @@
 
 ## 1. About GitHub, Markdown, Colab
 
-- [GitHub 사용법](링크주소)
+- [모방학습 개요](./robot-il-guiade.md)
 - [Markdown 문법](링크주소)
 - [Colab 기초](링크주소)
 
