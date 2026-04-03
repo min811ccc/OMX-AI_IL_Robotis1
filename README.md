@@ -3,7 +3,7 @@
 ## 1. About GitHub, Markdown, Colab
 
 - [모방학습 개요](./robot-il-guide.md)
-- [omx 서브모터](./aboutomx-submotor.md)
+- [omx 서브모터](./about omx-submotor)
 - [Colab 기초](링크주소)
 
 ## 2. About Python3
