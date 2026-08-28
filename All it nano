@@ -1,0 +1,424 @@
+핵심 용어 정리
+
+1. Jetson Orin Nano Super
+
+Jetson Orin Nano Super는 NVIDIA에서 만든 소형 AI 컴퓨터이다.
+
+로봇에 연결하여 카메라 영상이나 센서 데이터를 처리하고, 로봇을 제어하는 컴퓨터(컨트롤러) 역할을 할 수 있다.
+
+이번 프로젝트에서는 OMX-L과 OMX-F를 연결하고, ROS 2와 Docker, LeRobot 등의 소프트웨어를 실행하는 중심 장치로 사용한다.
+
+---
+
+2. ARM64 (aarch64)
+
+ARM64는 컴퓨터의 CPU가 사용하는 명령어 구조(아키텍처) 중 하나이다.
+
+- ARM64 = 64비트 ARM 아키텍처
+- aarch64 = ARM64를 가리키는 이름
+- Jetson Orin Nano Super가 사용하는 아키텍처
+
+컴퓨터 프로그램은 CPU 아키텍처에 맞게 만들어져야 하기 때문에, Jetson에서는 ARM64(aarch64)용 프로그램과 설치 파일을 사용해야 한다.
+
+예를 들어 Miniconda를 설치할 때:
+
+Jetson → ARM64(aarch64) 버전
+일반적인 Intel/AMD 노트북 → x86_64 버전
+
+따라서 노트북용 "x86_64" 설치 파일을 Jetson에서 그대로 사용할 수 없다.
+
+---
+
+3. x86_64
+
+x86_64는 Intel이나 AMD의 64비트 CPU에서 사용하는 대표적인 CPU 아키텍처이다.
+
+일반적인 Windows/Linux 노트북이나 데스크톱에서 많이 사용된다.
+
+이번 프로젝트에서는 Jetson과 노트북의 CPU 아키텍처가 다르기 때문에 Miniconda 설치 파일도 달라진다.
+
+Jetson Orin Nano Super
+→ ARM64 / aarch64
+
+일반적인 Intel·AMD PC
+→ x86_64
+
+---
+
+4. Miniconda
+
+Miniconda는 Python과 패키지를 관리하기 위한 가벼운 Conda 배포판이다.
+
+쉽게 말하면 여러 Python 프로젝트의 실행 환경을 독립적으로 만들어 관리할 수 있게 해주는 프로그램이다.
+
+이번 프로젝트에서는 LeRobot을 실행하기 위한 별도의 Python 환경을 만들기 위해 사용한다.
+
+conda create -y -n lerobot python=3.10
+
+위 명령어를 실행하면 "lerobot"이라는 독립적인 환경이 만들어지고, 그 안에서 Python 3.10을 사용할 수 있다.
+
+Miniconda를 사용하는 이유
+
+프로젝트마다 필요한 Python 버전이나 라이브러리가 다를 수 있다.
+
+예를 들어:
+
+프로젝트 A → Python 3.10
+프로젝트 B → Python 3.12
+
+처럼 서로 다른 환경을 만들어 충돌을 줄일 수 있다.
+
+---
+
+5. Conda Environment
+
+Conda Environment는 Python과 관련 패키지를 독립적으로 관리하는 가상 환경이다.
+
+이번 프로젝트에서는 다음 명령으로 "lerobot" 환경을 만들었다.
+
+conda create -y -n lerobot python=3.10
+conda activate lerobot
+
+"conda activate lerobot"을 실행하면 현재 터미널에서 "lerobot" 환경을 사용하게 된다.
+
+(base)
+   ↓
+conda activate lerobot
+   ↓
+(lerobot)
+
+---
+
+6. Python
+
+Python은 프로그램을 작성하고 실행하기 위한 프로그래밍 언어이다.
+
+이번 프로젝트에서는 Python 3.10 환경을 만들어 LeRobot을 실행한다.
+
+python --version
+
+을 이용하면 현재 사용 중인 Python 버전을 확인할 수 있다.
+
+---
+
+7. pip
+
+pip는 Python에서 사용하는 패키지(라이브러리)를 설치하고 관리하는 도구이다.
+
+예를 들어:
+
+pip install -e .
+
+를 실행하면 현재 프로젝트의 Python 패키지를 설치할 수 있다.
+
+이번 프로젝트에서는 pip를 이용해 LeRobot과 Dynamixel 관련 패키지를 설치한다.
+
+---
+
+8. LeRobot
+
+LeRobot은 로봇의 데이터 수집, 학습 및 제어 등을 위한 로봇 소프트웨어 프레임워크이다.
+
+이번 프로젝트에서는 ROBOTIS에서 제공하는 LeRobot 저장소를 가져와 설치한다.
+
+git clone https://github.com/ROBOTIS-GIT/lerobot.git
+
+그리고 Dynamixel 모터를 사용하기 위한 기능도 함께 설치한다.
+
+pip install -e ".[dynamixel]"
+
+---
+
+9. Dynamixel
+
+Dynamixel은 ROBOTIS에서 사용하는 스마트 액추에이터(모터) 제품군이다.
+
+일반적인 단순 모터와 달리 모터의 위치, 속도, 상태 등의 정보를 통신을 통해 주고받을 수 있다.
+
+이번 프로젝트에서는 OMX 로봇의 관절을 움직이고 상태 정보를 주고받는 데 사용된다.
+
+---
+
+10. Serial / USB Serial
+
+Serial 통신은 데이터를 순서대로 전송하는 통신 방식이다.
+
+OMX와 Jetson을 USB로 연결하면 Linux에서는 연결된 장치가 다음과 같은 이름으로 나타날 수 있다.
+
+/dev/ttyACM0
+/dev/ttyACM1
+
+다음 명령어를 사용하여 연결된 포트를 확인할 수 있다.
+
+ls /dev/ttyACM* /dev/ttyUSB* 2>/dev/null
+
+이번 환경에서는 "/dev/ttyACM0", "/dev/ttyACM1" 등이 확인되었으며, 문서의 테스트에서는 "/dev/ttyACM1"이 Leader로 확인되었다.
+
+---
+
+11. FFmpeg
+
+FFmpeg는 영상과 음성 데이터를 처리하기 위한 프로그램이다.
+
+영상의 변환, 인코딩, 디코딩 등의 작업에 사용된다.
+
+이번 프로젝트에서는 LeRobot 환경에서 사용할 FFmpeg를 Conda를 통해 설치했다.
+
+conda install -c conda-forge ffmpeg=6.1.1 -y
+
+---
+
+12. Git
+
+Git은 프로그램의 코드 변경 사항을 기록하고 관리하는 버전 관리 시스템이다.
+
+프로젝트가 진행되면서 코드가 어떻게 변경되었는지 기록할 수 있다.
+
+---
+
+13. GitHub
+
+GitHub는 Git을 이용해 코드를 저장하고 공유할 수 있는 온라인 플랫폼이다.
+
+이번 프로젝트에서는 설치 과정, 코드, 설정 방법 등을 GitHub에 기록하여 나중에 같은 환경을 다시 구축할 수 있도록 정리한다.
+
+---
+
+14. ROS 2
+
+**ROS 2 (Robot Operating System 2)**는 로봇 소프트웨어를 개발하기 위한 프레임워크이다.
+
+로봇의 센서, 모터, 카메라 등의 여러 요소가 데이터를 주고받을 수 있도록 통신 구조와 여러 기능을 제공한다.
+
+이번 프로젝트의 로봇 컨트롤러 환경에서 사용되는 주요 소프트웨어 중 하나이다.
+
+---
+
+15. Docker
+
+Docker는 프로그램을 실행하는 데 필요한 환경을 컨테이너라는 독립된 공간에 구성할 수 있도록 해주는 기술이다.
+
+운영체제나 컴퓨터 환경이 달라져도 비슷한 실행 환경을 유지할 수 있다는 장점이 있다.
+
+이번 프로젝트의 Jetson 로봇 컨트롤러 환경에서 사용되는 구성 요소 중 하나이다.
+
+---
+
+용어 간 관계
+
+                    Jetson Orin Nano Super
+                              │
+                     CPU Architecture
+                              │
+                       ARM64 (aarch64)
+                              │
+                        Linux 환경
+                              │
+                    ┌─────────┴─────────┐
+                    │                   │
+                Miniconda             Docker
+                    │
+             Conda Environment
+                    │
+             Python 3.10
+                    │
+              ┌─────┴─────┐
+              │           │
+           LeRobot     FFmpeg
+              │
+         Dynamixel SDK
+              │
+         USB Serial 통신
+              │
+        ROBOTIS OMX 로봇
+              │
+       Leader / Follower
+
+한 줄 요약
+
+용어| 역할
+Jetson Orin Nano Super| 로봇을 제어하는 컴퓨터
+ARM64 / aarch64| Jetson의 CPU 아키텍처
+x86_64| 일반적인 Intel/AMD PC의 CPU 아키텍처
+Miniconda| Python 환경 및 패키지 관리
+Conda Environment| 프로젝트별 독립적인 실행 환경
+Python| 프로그램을 실행하는 프로그래밍 언어
+pip| Python 패키지 설치 및 관리
+LeRobot| 로봇 제어·데이터 처리 프레임워크
+Dynamixel| ROBOTIS 스마트 모터
+Serial| 로봇과 컴퓨터 사이의 통신 방식
+FFmpeg| 영상·음성 데이터 처리
+Git| 코드 버전 관리
+GitHub| Git 기반 코드 저장·공유 플랫폼
+ROS 2| 로봇 소프트웨어 개발 및 통신 프레임워크
+Docker| 독립적인 실행 환경을 구성하는 기술
+
+16. Linux 명령어 정리
+
+"rm"
+
+"rm"은 Linux에서 파일이나 디렉터리를 삭제하는 명령어이다.
+
+rm 파일이름
+
+예를 들어:
+
+rm Miniconda3-latest-Linux-aarch64.sh
+
+는 해당 파일을 삭제한다.
+
+---
+
+"-r"
+
+"-r"은 **recursive(재귀적)**라는 의미이다.
+
+디렉터리 안에 파일이나 다른 디렉터리가 들어 있어도 내부까지 찾아가며 삭제할 수 있도록 한다.
+
+rm -r 디렉터리
+
+---
+
+"-f"
+
+"-f"는 **force(강제)**의 의미이다.
+
+삭제할 때 확인을 요구하는 상황 등을 무시하고 강제로 삭제하도록 한다.
+
+rm -f 파일
+
+---
+
+"~/"
+
+"~/"는 Linux에서 현재 사용자의 홈 디렉터리를 의미하는 경로이다.
+
+예를 들어 사용자의 홈 디렉터리가 "/home/orin"이라면:
+
+~/
+↓
+/home/orin/
+
+과 같은 의미가 된다.
+
+---
+
+"rm -rf ~/miniconda3"
+
+이번 프로젝트에서 실제로 사용한 명령어이다.
+
+rm -rf ~/miniconda3
+
+각 부분의 의미는 다음과 같다.
+
+rm       → 삭제
+-r       → 디렉터리 내부까지 삭제
+-f       → 강제로 삭제
+~/       → 현재 사용자의 홈 디렉터리
+miniconda3 → 삭제할 디렉터리
+
+따라서 "~/miniconda3"에 설치되어 있던 Miniconda 디렉터리 전체를 삭제하는 명령어이다.
+
+PDF에서는 잘못된 아키텍처의 Miniconda 설치 폴더를 삭제한 뒤, 노트북에 맞는 x86_64 버전을 다시 설치하는 과정에서 사용되었다.
+
+⚠️ 주의
+
+rm -rf ~/
+
+처럼 "miniconda3" 같은 대상 없이 "~/" 자체를 지정하면 홈 디렉터리의 내용을 매우 광범위하게 삭제할 수 있으므로 실행하면 안 된다.
+
+이번 프로젝트에서는 반드시:
+
+rm -rf ~/miniconda3
+
+처럼 삭제하려는 정확한 디렉터리를 지정했다.
+
+---
+
+"cd"
+
+"cd"는 Change Directory의 약자로, 현재 작업 디렉터리를 변경한다.
+
+cd lerobot
+
+을 실행하면 "lerobot" 디렉터리로 이동한다.
+
+이번 프로젝트에서는 GitHub에서 LeRobot을 Clone한 뒤 해당 디렉터리로 이동하기 위해 사용했다.
+
+---
+
+"ls"
+
+"ls"는 현재 디렉터리에 있는 파일과 폴더를 확인하는 명령어이다.
+
+ls
+
+예를 들어 LeRobot을 Clone한 뒤 "ls"를 실행하여 "lerobot" 디렉터리가 생성되었는지 확인할 수 있다.
+
+---
+
+"wget"
+
+"wget"은 인터넷에서 파일을 다운로드하는 명령어이다.
+
+이번 프로젝트에서는 Jetson에 맞는 ARM64용 Miniconda 설치 파일을 다운로드할 때 사용했다.
+
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh
+
+노트북에서는 CPU 아키텍처가 x86_64이므로 x86_64용 파일을 다운로드했다.
+
+---
+
+"bash"
+
+"bash"는 Linux에서 사용하는 셸(shell) 중 하나이다.
+
+다음과 같이 설치 스크립트를 실행할 수 있다.
+
+bash Miniconda3-latest-Linux-aarch64.sh
+
+---
+
+"chmod +x"
+
+"chmod"는 파일의 **권한(permission)**을 변경하는 명령어이다.
+
+"+x"는 해당 파일에 **실행 권한(executable permission)**을 추가한다.
+
+chmod +x Miniconda3-latest-Linux-x86_64.sh
+
+이후 파일을 직접 실행할 수 있다.
+
+./Miniconda3-latest-Linux-x86_64.sh
+
+이 과정은 PDF의 노트북용 Miniconda 설치 과정에 포함되어 있다.
+
+---
+
+"git clone"
+
+"git clone"은 Git 저장소에 있는 프로젝트를 현재 컴퓨터로 복제해서 가져오는 명령어이다.
+
+git clone https://github.com/ROBOTIS-GIT/lerobot.git
+
+이번 프로젝트에서는 ROBOTIS의 LeRobot 저장소를 Jetson으로 가져오는 데 사용했다.
+
+---
+
+명령어 정리
+
+명령어| 의미| 프로젝트에서의 사용
+"rm"| 삭제| 파일 삭제
+"rm -r"| 디렉터리 내부까지 삭제| 폴더 삭제
+"rm -f"| 강제 삭제| 삭제 확인 생략
+"rm -rf"| 디렉터리 강제 삭제| 기존 Miniconda 삭제
+"~/"| 홈 디렉터리| 사용자 홈 경로 지정
+"cd"| 디렉터리 이동| "lerobot" 폴더로 이동
+"ls"| 파일/폴더 목록 확인| 설치 결과 확인
+"wget"| 파일 다운로드| Miniconda 다운로드
+"bash"| 셸 스크립트 실행| Miniconda 설치
+"chmod +x"| 실행 권한 추가| 설치 파일 실행 준비
+"git clone"| Git 저장소 복제| LeRobot 다운로드
+
+
+이걸 **README의 `0. 용어 정리` 또는 `📚 Terminology` 섹션**으로 먼저 넣고, 그 다음에 네가 실제로 실행한 **설치 과정과 명령어**를 넣으면 GitHub 정리가 훨씬 제대로 된 형태가 돼.
